@@ -23,94 +23,96 @@ import { WishListContextPorvider } from "./context/Wishlist";
 import WhishList from "./pages/WhishList/WhishList";
 
 const Query = new QueryClient();
-const Routes = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "home",
-        element: (
-          <ProtectedRouting>
-            <Home />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "Proudect",
-        element: (
-          <ProtectedRouting>
-            <Proudect />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "ProudectDeitals/:id",
-        element: (
-          <ProtectedRouting>
-            <ProudectDeitals />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "categories",
-        element: (
-          <ProtectedRouting>
-            <Categories />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "Cart",
-        element: (
-          <ProtectedRouting>
-            <Cart />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "Brands",
-        element: (
-          <ProtectedRouting>
-            <Brands />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "Allorders",
-        element: (
-          <ProtectedRouting>
-            <AllOrders />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "CheckOut/:id",
-        element: (
-          <ProtectedRouting>
-            <CheckOut />
-          </ProtectedRouting>
-        ),
-      },
-      {
-        path: "WhishList",
-        element: (
-          <ProtectedRouting>
-            <WhishList />
-          </ProtectedRouting>
-        ),
-      },
-      { path: "Registar", element: <Registar /> },
-      { index: true, element: <Login /> },
-      { path: "forgetpassword", element: <ForgetPassword /> },
-      { path: "ResetPassword", element: <ResetPassword /> },
-      { path: "*", element: <NotFound /> },
-    ],
-  },
+const Routes = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "home",
+          element: (
+            <ProtectedRouting>
+              <Home />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "Proudect",
+          element: (
+            <ProtectedRouting>
+              <Proudect />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "ProudectDeitals/:id",
+          element: (
+            <ProtectedRouting>
+              <ProudectDeitals />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "categories",
+          element: (
+            <ProtectedRouting>
+              <Categories />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "Cart",
+          element: (
+            <ProtectedRouting>
+              <Cart />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "Brands",
+          element: (
+            <ProtectedRouting>
+              <Brands />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "Allorders",
+          element: (
+            <ProtectedRouting>
+              <AllOrders />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "CheckOut/:id",
+          element: (
+            <ProtectedRouting>
+              <CheckOut />
+            </ProtectedRouting>
+          ),
+        },
+        {
+          path: "WhishList",
+          element: (
+            <ProtectedRouting>
+              <WhishList />
+            </ProtectedRouting>
+          ),
+        },
+        { path: "Registar", element: <Registar /> },
+        { index: true, element: <Login /> },
+        { path: "forgetpassword", element: <ForgetPassword /> },
+        { path: "ResetPassword", element: <ResetPassword /> },
+        { path: "*", element: <NotFound /> },
+      ],
+    },
+  ],
   {
     basename: "/Freshcart/",
-  },
-]);
+  }
+);
 export default function App() {
   return (
     <QueryClientProvider client={Query}>
