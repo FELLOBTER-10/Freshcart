@@ -10,15 +10,22 @@ import Swal from "sweetalert2";
 import { CartContext } from "../../context/CartContext";
 import { WishListContext } from "../../context/Wishlist";
 import Loader from "../../Component/Loader";
+import { UserContext } from "../../context/TokenContext";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   let [spinnerButton, SetSpinnerButton] = useState(true);
   let { addCart, SetNumitem, SetCartOwnerId } = useContext(CartContext);
-  let { postWishListProudect, getMyWishList, WhishList } =
-    useContext(WishListContext);
+  let {
+    postWishListProudect,
+    getMyWishList,
+    whislist,
+    setWhishlist,
+    DeletItemWhishList,
+  } = useContext(WishListContext);
+  let { UserData, SetUserData } = useContext(UserContext);
   let [page, setPage] = useState(1);
   function GetAllProudect(queryData) {
-    // console.log(queryData);
     return axios.get(
       `https://ecommerce.routemisr.com/api/v1/products?page=${page}`
     );
@@ -28,7 +35,9 @@ export default function Home() {
     ["ProudectApi", page],
     GetAllProudect
   );
+  // useEffect(() => {
 
+  // }, []);
   let proudectList = data?.data?.data;
   function getpages(event) {
     let page = event.target.getAttribute("pagenum");
@@ -56,18 +65,29 @@ export default function Home() {
     }
   }
 
-  async function WishList(id) {
-    let req = await postWishListProudect(id);
-    console.log(req);
-    Swal.fire(req.data.message);
+  async function WishList(product) {
+    let found = whislist.find((item) => item.id == product.id);
+    console.log(found);
+    if (found) {
+      let req = await DeletItemWhishList(product.id);
+      if (req?.data.status == "success") {
+        toast.success(req.data.message);
+        let NewWhishList = req.data.data;
+        setWhishlist((WhishList) =>
+          WhishList.filter((item) => NewWhishList.includes(item.id))
+        );
+      }
+    } else {
+      let req = await postWishListProudect(product.id);
+      toast.success(req.data.message);
+      setWhishlist((items)=>[...items,product]);
+      console.log(req);
+    }
   }
-
-  async function heart(event, id) {
-    // event.target.classList.replace("fa-regular", "fa-solid");
-    let req = await getMyWishList();
-    console.log(req);
+  if (!whislist.length) {
+    return <Loader />;
   }
-
+  console.log(whislist);
   return (
     <>
       <MainSlider />
@@ -77,15 +97,15 @@ export default function Home() {
         <Loader />
       ) : (
         <div className="py-5">
+          <Toaster position="top-right" />
           <div className="container">
             <div className="row g-5 ">
               {isLoading ? "" : ""}
               {proudectList.map((el) => {
-                // console.log(el);
                 return (
-                  <div key={el.id} className="col-md-2 cursor-pointer px-2">
+                  <div key={el._id} className="col-md-2 cursor-pointer px-2">
                     <div className="product position-relative">
-                      <Link to={"/ProudectDeitals/" + el.id}>
+                      <Link to={"/ProudectDeitals/" + el._id}>
                         <img src={el.imageCover} alt="" className="w-100" />
                         <h6 className="text-main fw-bolder pt-2 ms-1">
                           {" "}
@@ -103,17 +123,14 @@ export default function Home() {
                           </span>
                         </div>
                       </Link>
-                      <div 
-                        onClick={() => WishList(el.id)}
+                      <div
+                        onClick={() => WishList(el)}
                         className="layer cursor-pointer my-1 d-flex justify-content-end"
                       >
-                        {WhishList.find((item) => {
+                        {whislist.find((item) => {
                           return item.id == el.id;
                         }) ? (
-                          <i
-                            onClick={(event) => heart(event)}
-                            className="fa-solid cursor-pointer text-danger fa-heart fs-4  d-block"
-                          ></i>
+                          <i className="fa-solid cursor-pointer text-danger fa-heart fs-4  d-block"></i>
                         ) : (
                           <i className="fa-regular fa-heart cursor-pointer text-danger fa-heart fs-4  d-block "></i>
                         )}

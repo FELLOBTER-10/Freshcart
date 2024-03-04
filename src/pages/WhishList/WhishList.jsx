@@ -4,34 +4,19 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { CartContext } from "../../context/CartContext";
 import { WishListContext } from "../../context/Wishlist";
+import toast, { Toaster } from "react-hot-toast";
 export default function WhishList() {
   let [loading, setLoading] = useState(true);
-  let [whishlistData, SetwhishlistData] = useState(null);
   let [spinnerButton, SetSpinnerButton] = useState(true);
+  let [ErrorMessage, SetErrorMessage] = useState("");
   let { addCart, SetNumitem } = useContext(CartContext);
-  let {
-    getMyWishList,
-    DeletItemWhishList,
-    SetNumWhishList,
-    heartData,
-    SetHeartData,
-    WhishList,
-    SetwhishLit,
-  } = useContext(WishListContext);
+  let { getMyWishList, DeletItemWhishList, whislist, setWhishlist } =
+    useContext(WishListContext);
+
   useEffect(() => {
     getWhishList();
   }, []);
 
-  async function getWhishList() {
-    setLoading(true);
-    let req = await getMyWishList();
-    if (req?.data?.status == "success") {
-      SetwhishLit(req.data.data);
-      SetNumWhishList(req.data.count);
-      SetwhishlistData(req?.data?.data);
-      setLoading(false);
-    }
-  }
 
 
   async function AddToCart(id) {
@@ -60,31 +45,51 @@ export default function WhishList() {
       setLoading(false);
     }
   }
-
-  async function RemoveItem(id) {
+  async function getWhishList() {
+    let option = {
+      headers: {
+        token: localStorage.getItem(`UserToken`),
+      },
+    };
     setLoading(true);
+    let req = await getMyWishList();
+    console.log(req);
+    if (req?.data?.status == "success") {
+      setWhishlist(req.data.data);
+      setWhishlist(req?.data?.data);
+      setLoading(false);
+    }
+  }
+  async function RemoveItem(id) {
     let req = await DeletItemWhishList(id);
     console.log(req);
     if (req?.data.status == "success") {
-      SetNumWhishList(req.data.count);
-      SetwhishlistData(req?.data?.data);
-      setLoading(false);
+      console.log(req.data.message);
+      let NewWhishList = req.data.data;
+      setWhishlist((WhishList) =>
+        WhishList.filter((item) => NewWhishList.includes(item.id))
+      );
+      toast.success(req.data.message);
     }
   }
 
   return (
     <>
+      <Toaster position="top-right" />
       {loading ? (
         <div className=" loading d-flex justify-content-center align-items-center bg-white position-fixed top-0 end-0 start-0 bottom-0">
           <span className="loader3"></span>
         </div>
       ) : (
         <div>
-          <h1 className="fw-bolder pb-5">
-            wishList Item <i className="fa-solid fa-heart text-danger"></i>
-          </h1>
-          {whishlistData.map((element) => {
-            // console.log(element);
+          {whislist ? (
+            ""
+          ) : (
+            <h1 className="fw-bolder pb-5">
+              wishList Item <i className="fa-solid fa-heart text-danger"></i>
+            </h1>
+          )}
+          {whislist.map((element) => {
             return (
               <div
                 key={element.id}
@@ -121,11 +126,10 @@ export default function WhishList() {
                       onClick={() => AddToCart(element.id)}
                       className="btn btn-outline-dark"
                     >
-                      Add To Cart{" "}
+                      Add To Cart
                     </button>
                   ) : (
                     <button className="btn btn-outline-dark">
-                      {" "}
                       <i className="fa-solid fa-spinner fa-spin"></i>
                     </button>
                   )}

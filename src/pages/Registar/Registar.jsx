@@ -7,10 +7,12 @@ export default function Registar() {
   let navg = useNavigate()
   let [ErrMessage, setErrMessage] = useState("")
   let [loading, setLoading] = useState(true)
-  async function RegistarForm(vlaue) {
+
+
+  async function RegistarForm(value) {
     setLoading(false)
-    let req = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signup",
-      vlaue).catch((err) => {
+    let req = await axios.post("https://ecommerce.routemisr.com/api/v1/auth/signup",value)
+       .catch((err) => {
         setLoading(true)
         setErrMessage(err.response.data.message)
       })
@@ -21,11 +23,11 @@ export default function Registar() {
   }
 
   let validationSchema = Yup.object({
-    name: Yup.string().required('Name is Required').min(3, 'min character 3').max(20, 'max character 20'),
-    email: Yup.string().required("email is Required").email("enter valid email"),
-    password: Yup.string().required("password is Required").matches(/^[A-Z][a-z!@#$%^&*()_0-9]{8,16}$/, "entar valid password"),
-    rePassword: Yup.string().required("RePassword is Required").oneOf([Yup.ref("password")], "RePassword Not Match"),
-    phone: Yup.string().required("phone is Required").matches(/^01[1520][0-9]{8}$/, "enter valid phone")
+    name: Yup.string().required('Name is Not Required').min(3, 'min character 3').max(20, 'max character 20'),
+    email: Yup.string().required("email is Not Required").email("enter valid email"),
+    password: Yup.string().required("password is Not Required").matches(/^[A-Z][a-z!@#$%^&*()_0-9]{8,16}$/, "entar valid password"),
+    rePassword: Yup.string().required("RePassword is Not Required").oneOf([Yup.ref("password")], "RePassword Not Match"),
+    phone: Yup.string().required("phone is Not Required").matches(/^01[1520][0-9]{8}$/, "enter valid phone")
   })
   let form1 = useFormik({
     initialValues: {
@@ -43,9 +45,7 @@ export default function Registar() {
     <div>
 
       <h1 className='pb-2'>Registar Now.....</h1>
-      {ErrMessage != "" ? <div className='alert alert-danger'>
-        {ErrMessage}
-      </div> : ""}
+      {ErrMessage != "" ? <div className='alert alert-danger'>{ErrMessage}</div> : ""}
 
       <form onSubmit={form1.handleSubmit} >
         <div>

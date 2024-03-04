@@ -10,9 +10,11 @@ export default function Navbar() {
   let navg = useNavigate();
   let { UserData, SetUserData } = useContext(UserContext);
   let { Numitem, SetNumitem } = useContext(CartContext);
-  let { NumWhishList, SetNumWhishList } = useContext(WishListContext);
+  let { NumWhishList, SetNumWhishList, getWhishList } =
+    useContext(WishListContext);
   function LogOut() {
     localStorage.setItem("user", null);
+    localStorage.setItem("UserToken", null);
     SetUserData(null);
     navg("/");
   }
@@ -128,14 +130,6 @@ export default function Navbar() {
                 ) : (
                   ""
                 )}
-                {NumWhishList == null ? (
-                  <span className="cursor-pointer position-relative ">
-                    <i className="fa-solid fa-heart cursor-pointer mx-2 "></i>
-                  </span>
-                ) : (
-                  ""
-                )}
-
                 {UserData ? (
                   <span
                     onClick={NavgToCart}

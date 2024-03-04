@@ -1,11 +1,10 @@
 export default function Footer() {
   return (
     <>
-      <div className="bg-secondary-subtle p-5  footer">
+      <div className="bg-secondary-subtle position-absolute p-4 footer col-md-12 ">
         <div>
           <h4 className="fw-bolder"> Get the Fresh Cart app </h4>
           <p className="text-muted">
-            {" "}
             We will send you a link, open it on your phone to download the app{" "}
           </p>
           <div className="container-fluid d-flex justify-content-between">

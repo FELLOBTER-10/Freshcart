@@ -25,8 +25,12 @@ export default function CategroySlider() {
           {CategoryList.map((el) => {
             return (
               <div key={el._id} className="item  w-100 ">
-                <img src={el.image} height={200} alt="" className="w-100" />
-                <h5 className="fw-bolder w-100 my-1 text-center">{el.name}</h5>
+                <div>
+                  <img src={el.image} height={200} alt="" className="w-100" />
+                  <div className="fw-bolder w-100 my-1 text-center ">
+                    {el.name}
+                  </div>
+                </div>
               </div>
             );
           })}

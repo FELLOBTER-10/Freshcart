@@ -4,9 +4,7 @@ import { createContext, useState } from "react";
 export let WishListContext = createContext();
 
 export function WishListContextPorvider({ children }) {
-  let [NumWhishList, SetNumWhishList] = useState(0);
-  let [heartData, SetHeartData] = useState([]);
-  let [WhishList, SetwhishLit] = useState([]);
+  let [whislist, setWhishlist] = useState([]);
 
   function postWishListProudect(id) {
     let option = {
@@ -25,14 +23,22 @@ export function WishListContextPorvider({ children }) {
     );
   }
 
-  function getMyWishList() {
+  async function getMyWishList(token) {
     let option = {
       headers: {
-        token: localStorage.getItem(`UserToken`),
+        token,
       },
     };
+    try {
+      let req = await axios.get(
+        `https://ecommerce.routemisr.com/api/v1/wishlist`,
+        option
+      );
+      setWhishlist(req.data.data)
+    } catch (Error) {
+      console.log(Error);
+    }
 
-    return axios.get(`https://ecommerce.routemisr.com/api/v1/wishlist`, option);
   }
 
   function DeletItemWhishList(id) {
@@ -48,21 +54,14 @@ export function WishListContextPorvider({ children }) {
     );
   }
 
-
-
-
   return (
     <WishListContext.Provider
       value={{
         postWishListProudect,
-        heartData,
-        SetHeartData,
         getMyWishList,
         DeletItemWhishList,
-        NumWhishList,
-        SetNumWhishList,
-        WhishList,
-        SetwhishLit,
+        whislist,
+        setWhishlist,
       }}
     >
       {children}

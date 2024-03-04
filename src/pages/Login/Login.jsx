@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Formik, useFormik } from "formik";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
@@ -9,11 +9,16 @@ import { UserContext } from "../../context/TokenContext";
 import { jwtDecode } from "jwt-decode";
 
 export default function Login() {
+  useEffect(() => {
+    localStorage.setItem("user", null);
+    localStorage.setItem("UserToken", null);
+  }, []);
   let { getUsetCart, SetNumitem } = useContext(CartContext);
   let { SetUserData } = useContext(UserContext);
   let navg = useNavigate();
   let [ErrMessage, setErrMessage] = useState("");
   let [loading, setLoading] = useState(true);
+
   let validationSchema = Yup.object({
     email: Yup.string()
       .required("email is Required")
@@ -38,7 +43,6 @@ export default function Login() {
         setErrMessage(err.response.data.message);
         setLoading(true);
       });
-
     if (req?.data.message == "success") {
       console.log(req);
       setLoading(true);
@@ -49,8 +53,8 @@ export default function Login() {
         token: req.data.token,
       };
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("UserToken", req?.data.token);
       SetUserData(user);
-      // GetUserNumCart(req.data.token);
       navg("/home");
     }
   }

@@ -7,14 +7,8 @@ import { UserContext } from "../../context/TokenContext";
 export default function Cart() {
   let {
     getUserData,
-    RemoveProudect,
-    SetNumitem,
-    ClearProudect,
-    UpdateData,
-    SetLoading,
     Loading,
     CartData,
-    SetCartData,
     RemoveItem,
     ClearAllPrudects,
     UpdateCount,
@@ -25,7 +19,6 @@ export default function Cart() {
       getUserData(UserData.token);
     }
   }, []);
-  console.log(CartData);
   return (
     <>
       {Loading ? (
