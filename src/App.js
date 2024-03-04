@@ -25,7 +25,7 @@ import WhishList from "./pages/WhishList/WhishList";
 const Query = new QueryClient();
 const Routes = createBrowserRouter([
   {
-    path: "",
+    path: "/",
     element: <Layout />,
     children: [
       {
