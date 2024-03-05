@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import { UserContext } from "../../context/TokenContext";
 import { jwtDecode } from "jwt-decode";
+import toast from "react-hot-toast";
 
 export default function Login() {
   useEffect(() => {
@@ -21,10 +22,10 @@ export default function Login() {
 
   let validationSchema = Yup.object({
     email: Yup.string()
-      .required("email is Required")
+      .required("email is Not Required")
       .email("enter valid email"),
     password: Yup.string()
-      .required("password is Required")
+      .required("password is Not Required")
       .matches(/^[A-Z][a-z!@#$%^&*()_0-9]{8,16}$/, "entar valid password"),
   });
   let form1 = useFormik({
@@ -56,6 +57,7 @@ export default function Login() {
       localStorage.setItem("UserToken", req?.data.token);
       SetUserData(user);
       navg("/home");
+      
     }
   }
 

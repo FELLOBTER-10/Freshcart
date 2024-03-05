@@ -25,7 +25,7 @@ export default function ForgetPassword() {
     })
 
     let validationSchema2 = Yup.object({
-        resetCode: Yup.string().required("resetCode is Required").matches(/^[0-9]{4,6}$/, "Entar Valid Code"),
+        resetCode: Yup.string().required("resetCode is Not Required").matches(/^[0-9]{4,6}$/, "Entar Valid Code"),
 
     })
 

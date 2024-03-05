@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import OwlCarousel from "react-owl-carousel";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -6,18 +6,12 @@ import { CartContext } from "../../context/CartContext";
 import { WishListContext } from "../../context/Wishlist";
 import toast, { Toaster } from "react-hot-toast";
 export default function WhishList() {
-  let [loading, setLoading] = useState(true);
   let [spinnerButton, SetSpinnerButton] = useState(true);
   let [ErrorMessage, SetErrorMessage] = useState("");
   let { addCart, SetNumitem } = useContext(CartContext);
-  let { getMyWishList, DeletItemWhishList, whislist, setWhishlist } =
+
+  let { setLoading, DeletItemWhishList, whislist, setWhishlist, loading } =
     useContext(WishListContext);
-
-  useEffect(() => {
-    getWhishList();
-  }, []);
-
-
 
   async function AddToCart(id) {
     SetSpinnerButton(false);
@@ -31,7 +25,6 @@ export default function WhishList() {
       });
     });
     setLoading(false);
-    console.log(req);
 
     if (req?.data?.status == "success") {
       setLoading(true);
@@ -45,21 +38,7 @@ export default function WhishList() {
       setLoading(false);
     }
   }
-  async function getWhishList() {
-    let option = {
-      headers: {
-        token: localStorage.getItem(`UserToken`),
-      },
-    };
-    setLoading(true);
-    let req = await getMyWishList();
-    console.log(req);
-    if (req?.data?.status == "success") {
-      setWhishlist(req.data.data);
-      setWhishlist(req?.data?.data);
-      setLoading(false);
-    }
-  }
+
   async function RemoveItem(id) {
     let req = await DeletItemWhishList(id);
     console.log(req);
@@ -83,11 +62,12 @@ export default function WhishList() {
       ) : (
         <div>
           {whislist ? (
-            ""
-          ) : (
-            <h1 className="fw-bolder pb-5">
-              wishList Item <i className="fa-solid fa-heart text-danger"></i>
+            <h1 className="fw-bolder text-center pb-5">
+              WISHLIST ITEM{" "}
+              <i className="fa-solid fa-heart text-danger fa-beat "></i>
             </h1>
+          ) : (
+            ""
           )}
           {whislist.map((element) => {
             return (
@@ -113,7 +93,7 @@ export default function WhishList() {
                       </span>
                       <Link
                         onClick={() => RemoveItem(element.id)}
-                        className="text-danger"
+                        className="text-danger "
                       >
                         Remove <i className="fa-solid fa-trash"></i>
                       </Link>
@@ -124,7 +104,7 @@ export default function WhishList() {
                   {spinnerButton ? (
                     <button
                       onClick={() => AddToCart(element.id)}
-                      className="btn btn-outline-dark"
+                      className="btn btn-outline-dark Margin"
                     >
                       Add To Cart
                     </button>

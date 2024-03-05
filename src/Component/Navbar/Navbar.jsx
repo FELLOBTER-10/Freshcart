@@ -5,18 +5,18 @@ import { useQuery } from "react-query";
 import { UserContext } from "../../context/TokenContext";
 import { CartContext } from "../../context/CartContext";
 import { WishListContext } from "../../context/Wishlist";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Navbar() {
   let navg = useNavigate();
   let { UserData, SetUserData } = useContext(UserContext);
-  let { Numitem, SetNumitem } = useContext(CartContext);
-  let { NumWhishList, SetNumWhishList, getWhishList } =
-    useContext(WishListContext);
+  let { Numitem } = useContext(CartContext);
   function LogOut() {
     localStorage.setItem("user", null);
     localStorage.setItem("UserToken", null);
     SetUserData(null);
     navg("/");
+    toast.success("GoodBye, " + UserData.name);
   }
 
   function NavgToCart() {
@@ -24,6 +24,7 @@ export default function Navbar() {
   }
   return (
     <>
+      <Toaster position="top=right" />
       <nav className="navbar navbar-expand-lg fixed-top bg-white  ">
         <div className="container-fluid">
           <NavLink className="navbar-brand " to="home">
@@ -46,7 +47,7 @@ export default function Navbar() {
           >
             {UserData ? (
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link " : "nav-link"
@@ -58,7 +59,7 @@ export default function Navbar() {
                   </NavLink>
                 </li>
 
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link" : "nav-link"
@@ -68,7 +69,7 @@ export default function Navbar() {
                     Categories
                   </NavLink>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link" : "nav-link"
@@ -78,7 +79,7 @@ export default function Navbar() {
                     Brands
                   </NavLink>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link" : "nav-link"
@@ -88,7 +89,7 @@ export default function Navbar() {
                     Cart
                   </NavLink>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link" : "nav-link"
@@ -99,12 +100,12 @@ export default function Navbar() {
                   </NavLink>
                 </li>
 
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <NavLink
                     className={(active) =>
                       active.isActive == true ? "test nav-link" : "nav-link"
                     }
-                    to="Allorders"
+                    to="allorders"
                   >
                     Allorders
                   </NavLink>
@@ -115,11 +116,18 @@ export default function Navbar() {
             )}
 
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li className="nav-item mx-2 d-flex align-items-center">
+              <li className="nav-item  mx-2 d-flex align-items-center">
+                {UserData ? (
+                  <i className="fw-bolder nav-link text-black cursor-pointer">
+                    {UserData.name}
+                  </i>
+                ) : (
+                  ""
+                )}
                 <i className="fa-brands fa-facebook mx-2"></i>
                 <i className="fa-brands fa-twitter mx-2"></i>
                 <i className="fa-brands fa-instagram mx-2"></i>
-                <i className="fa-brands fa-youtube mx-2"></i>
+
                 {UserData ? (
                   <Link to={"/WhishList"}>
                     {" "}
@@ -135,7 +143,7 @@ export default function Navbar() {
                     onClick={NavgToCart}
                     className=" cursor-pointer position-relative "
                   >
-                    <i className="fa-solid  fa-cart-shopping mx-2 cursor-pointer"></i>
+                    <i class="fa-brands fa-opencart mx-2 cursor-pointer"></i>
                     {Numitem == null ? (
                       ""
                     ) : (
@@ -149,14 +157,14 @@ export default function Navbar() {
                 )}
               </li>
               {UserData ? (
-                <li className="nav-item">
+                <li className="nav-item fw-bolder">
                   <span className="nav-link cursor-pointer" onClick={LogOut}>
                     LogOut
                   </span>
                 </li>
               ) : (
                 <>
-                  <li className="nav-item">
+                  <li className="nav-item fw-bolder">
                     <NavLink
                       className={(active) =>
                         active.isActive == true ? "nav-link test" : "nav-link"
@@ -167,7 +175,7 @@ export default function Navbar() {
                       Login
                     </NavLink>
                   </li>
-                  <li className="nav-item">
+                  <li className="nav-item fw-bolder">
                     <NavLink
                       className={(active) =>
                         active.isActive == true ? "nav-link test" : "nav-link"

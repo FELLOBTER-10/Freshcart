@@ -21,6 +21,7 @@ export default function AllOrders() {
   }, [UserData]);
 
   async function getSuerOrders(id) {
+    SetLoading(true)
     let req = await axios
       .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
       .catch((err) => {

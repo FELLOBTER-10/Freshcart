@@ -1,11 +1,11 @@
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export let WishListContext = createContext();
 
 export function WishListContextPorvider({ children }) {
   let [whislist, setWhishlist] = useState([]);
-
+  let [loading, setLoading] = useState(true);
   function postWishListProudect(id) {
     let option = {
       headers: {
@@ -30,15 +30,20 @@ export function WishListContextPorvider({ children }) {
       },
     };
     try {
+      setLoading(true);
       let req = await axios.get(
         `https://ecommerce.routemisr.com/api/v1/wishlist`,
         option
       );
-      setWhishlist(req.data.data)
+      console.log(req);
+
+      setWhishlist(req.data.data);
+      if (req.data.status == "success") {
+        setLoading(false);
+      }
     } catch (Error) {
       console.log(Error);
     }
-
   }
 
   function DeletItemWhishList(id) {
@@ -54,6 +59,10 @@ export function WishListContextPorvider({ children }) {
     );
   }
 
+  useEffect(() => {
+    getMyWishList();
+  }, []);
+
   return (
     <WishListContext.Provider
       value={{
@@ -62,6 +71,8 @@ export function WishListContextPorvider({ children }) {
         DeletItemWhishList,
         whislist,
         setWhishlist,
+        loading,
+        setLoading
       }}
     >
       {children}

@@ -1,43 +1,39 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 export let CartContext = createContext();
 
 export function CartContextProvider({ children }) {
   let [Numitem, SetNumitem] = useState(0);
-  let [CartOwnerId, SetCartOwnerId] = useState("");
   let [Loading, SetLoading] = useState(true);
   let [CartData, SetCartData] = useState(null);
+  let { shake, SetShake } = useState(true);
 
-  function getUsetCart(token) {
+  async function getUserData(token) {
     console.log(token);
     let option = {
       headers: {
         token,
       },
     };
-
-    return axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, option);
-  }
-
-  async function getUserData(token) {
     SetLoading(true);
-    let req = await getUsetCart(token).catch((err) => {
-      console.log(err);
-      if (err.response.data.statusMsg == "fail") {
-        SetCartData(null);
-        SetLoading(false);
-      }
-    });
-    console.log(req);
+    let req = await axios
+      .get(`https://ecommerce.routemisr.com/api/v1/cart`, option)
+      .catch((err) => {
+        console.log(err);
+        if (err.response.data.statusMsg == "fail") {
+          SetCartData(null);
+          SetLoading(false);
+        }
+      });
 
     if (req?.data.status == "success") {
       SetLoading(false);
       SetCartData(req?.data?.data);
     }
   }
-
   async function GetUserCart(token) {
     let option = {
       headers: {
@@ -46,7 +42,6 @@ export function CartContextProvider({ children }) {
     };
     return axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, option);
   }
-
   function addCart(id) {
     let option = {
       headers: {
@@ -63,22 +58,17 @@ export function CartContextProvider({ children }) {
       option
     );
   }
-
-  function RemoveProudect(id) {
+  async function RemoveItem(id) {
     let option = {
       headers: {
         token: localStorage.getItem("UserToken"),
       },
     };
-    return axios.delete(
+    SetLoading(true);
+    let req = await axios.delete(
       `https://ecommerce.routemisr.com/api/v1/cart/${id}`,
       option
     );
-  }
-
-  async function RemoveItem(id) {
-    SetLoading(true);
-    let req = await RemoveProudect(id);
     console.log(req);
     if (req?.data.status == "success") {
       SetCartData(req.data.data);
@@ -86,53 +76,28 @@ export function CartContextProvider({ children }) {
       SetNumitem(req.data.numOfCartItems);
     }
   }
-
-  function ClearProudect() {
+  async function ClearAllPrudects() {
     let option = {
       headers: {
         token: localStorage.getItem("UserToken"),
       },
     };
-    return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart`, option);
-  }
-
-  async function ClearAllPrudects() {
     SetLoading(true);
-    let req = await ClearProudect();
+    let req = await axios.delete(
+      `https://ecommerce.routemisr.com/api/v1/cart`,
+      option
+    );
     console.log(req);
-    if (req.data.message == "success") {
+    if (req.data.message == "success") {;
       SetCartData(null);
       SetNumitem(req.data.numOfCartItems);
       SetLoading(false);
       EmptyCart();
     }
   }
-
   function EmptyCart() {
-    let timerInterval;
-    Swal.fire({
-      title: "Products are now being deleted!",
-      html: "I will close in <b></b> milliseconds.",
-      timer: 2000,
-      timerProgressBar: true,
-      didOpen: () => {
-        Swal.showLoading();
-        const timer = Swal.getPopup().querySelector("b");
-        timerInterval = setInterval(() => {
-          timer.textContent = `${Swal.getTimerLeft()}`;
-        }, 100);
-      },
-      willClose: () => {
-        clearInterval(timerInterval);
-      },
-    }).then((result) => {
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log("I was closed by the timer");
-      }
-    });
+    toast.success('Successfully Deleted!');
   }
-
   function checkOUtPayment(id, data) {
     let option = {
       headers: {
@@ -145,12 +110,11 @@ export function CartContextProvider({ children }) {
     };
 
     return axios.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=http://localhost:3000`,
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=http://localhost:3000/Freshcart`,
       body,
       option
     );
   }
-
   function UpdateData(id, count) {
     let option = {
       headers: {
@@ -166,12 +130,12 @@ export function CartContextProvider({ children }) {
       option
     );
   }
-
   async function GetUserNumCart(token) {
-    
-    let req = await getUsetCart(token).catch((err) => {
-      console.log(err);
-    });
+    let req = await axios
+      .get(`https://ecommerce.routemisr.com/api/v1/cart`, token)
+      .catch((err) => {
+        console.log(err);
+      });
 
     console.log(req);
     if (req?.data?.status == "success") {
@@ -194,25 +158,15 @@ export function CartContextProvider({ children }) {
     }
   }
 
-  // function GetSuerOrders(){
-  //   return axios.get(`https://ecommerce.routemisr.com/api/v1/orders/user/${CartOwnerId}`)
-  // }
-
   return (
     <CartContext.Provider
       value={{
-        ClearProudect,
         addCart,
         Numitem,
         SetNumitem,
         checkOUtPayment,
-        getUsetCart,
-        RemoveProudect,
         UpdateData,
         GetUserCart,
-        SetCartOwnerId,
-        // GetSuerOrders,
-        CartOwnerId,
         getUserData,
         Loading,
         CartData,
@@ -222,6 +176,8 @@ export function CartContextProvider({ children }) {
         ClearAllPrudects,
         UpdateCount,
         GetUserNumCart,
+        shake,
+        SetShake,
       }}
     >
       {children}

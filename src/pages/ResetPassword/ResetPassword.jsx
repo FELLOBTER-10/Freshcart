@@ -8,8 +8,8 @@ export default function ResetPassword() {
   let [ErrorMessage, SetErrorMessage] = useState('')
   let Navg = useNavigate()
   let validationSchema = Yup.object({
-    email: Yup.string().required("email is Required").email("enter valid email"),
-    newPassword: Yup.string().required("password is Required").matches(/^[A-Z][a-z!@#$%^&*()_0-9]{8,16}$/, "entar valid password"),
+    email: Yup.string().required("email is Not Required").email("enter valid email"),
+    newPassword: Yup.string().required("password is Not Required").matches(/^[A-Z][a-z!@#$%^&*()_0-9]{8,16}$/, "entar valid password"),
   })
 
   async function ConfirmNewPassword(val) {

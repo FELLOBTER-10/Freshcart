@@ -23,12 +23,15 @@ export default function CategroySlider() {
       <div>
         <OwlCarousel items={6} loop>
           {CategoryList.map((el) => {
+            console.log(el);
             return (
-              <div key={el._id} className="item  w-100 ">
-                <div>
+              <div key={el._id} className="item w-100 ">
+                <div className=" col-md-12  ">
                   <img src={el.image} height={200} alt="" className="w-100" />
-                  <div className="fw-bolder w-100 my-1 text-center ">
-                    {el.name}
+                  <div className="d-flex justify-content-end">
+                    <div className="fw-bolder Size w-100 my-1 text-center">
+                      {el.name.split(" ").slice(0, 1).join("  ")}
+                    </div>
                   </div>
                 </div>
               </div>

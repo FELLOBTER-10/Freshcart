@@ -15,29 +15,17 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function Home() {
   let [spinnerButton, SetSpinnerButton] = useState(true);
-  let { addCart, SetNumitem, SetCartOwnerId } = useContext(CartContext);
-  let {
-    postWishListProudect,
-    getMyWishList,
-    whislist,
-    setWhishlist,
-    DeletItemWhishList,
-  } = useContext(WishListContext);
-  let { UserData, SetUserData } = useContext(UserContext);
+  let { UserData } = useContext(UserContext);
+  let { addCart, SetNumitem,  } = useContext(CartContext);
+  let { postWishListProudect, whislist, setWhishlist, DeletItemWhishList } =
+    useContext(WishListContext);
   let [page, setPage] = useState(1);
   function GetAllProudect(queryData) {
     return axios.get(
       `https://ecommerce.routemisr.com/api/v1/products?page=${page}`
     );
   }
-
-  let { isError, isLoading, data, isFetching, refetch } = useQuery(
-    ["ProudectApi", page],
-    GetAllProudect
-  );
-  // useEffect(() => {
-
-  // }, []);
+  let { isLoading, data } = useQuery(["ProudectApi", page], GetAllProudect);
   let proudectList = data?.data?.data;
   function getpages(event) {
     let page = event.target.getAttribute("pagenum");
@@ -80,20 +68,17 @@ export default function Home() {
     } else {
       let req = await postWishListProudect(product.id);
       toast.success(req.data.message);
-      setWhishlist((items)=>[...items,product]);
+      setWhishlist((items) => [...items, product]);
       console.log(req);
     }
   }
-  if (!whislist.length) {
-    return <Loader />;
-  }
-  console.log(whislist);
+
   return (
     <>
       <MainSlider />
       <CategroySlider />
 
-      {isLoading ? (
+      {isLoading == true ? (
         <Loader />
       ) : (
         <div className="py-5">
@@ -103,7 +88,7 @@ export default function Home() {
               {isLoading ? "" : ""}
               {proudectList.map((el) => {
                 return (
-                  <div key={el._id} className="col-md-2 cursor-pointer px-2">
+                  <div key={el._id} className="col-md-2  cursor-pointer px-2">
                     <div className="product position-relative">
                       <Link to={"/ProudectDeitals/" + el._id}>
                         <img src={el.imageCover} alt="" className="w-100" />
