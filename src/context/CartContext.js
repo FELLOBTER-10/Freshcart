@@ -110,7 +110,7 @@ export function CartContextProvider({ children }) {
     };
 
     return axios.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=https://fellobter-10.github.io/Freshcart/allorders`,
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=https://fellobter-10.github.io/Freshcart/`,
       body,
       option
     );
