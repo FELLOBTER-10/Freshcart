@@ -21,7 +21,7 @@ export default function AllOrders() {
   }, [UserData]);
 
   async function getSuerOrders(id) {
-    SetLoading(true)
+    SetLoading(true);
     let req = await axios
       .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${id}`)
       .catch((err) => {
@@ -30,9 +30,9 @@ export default function AllOrders() {
 
     if (req?.status == 200) {
       SetorderData(req?.data);
-      console.log(req);
+      // console.log(req);
       SetLoading(false);
-      console.log(ordersData);
+      // console.log(ordersData);
     }
 
     console.log(req);
