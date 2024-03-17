@@ -88,7 +88,7 @@ export function CartContextProvider({ children }) {
       option
     );
     console.log(req);
-    if (req.data.message == "success") {;
+    if (req.data.message == "success") {
       SetCartData(null);
       SetNumitem(req.data.numOfCartItems);
       SetLoading(false);
@@ -96,7 +96,7 @@ export function CartContextProvider({ children }) {
     }
   }
   function EmptyCart() {
-    toast.success('Successfully Deleted!');
+    toast.success("Successfully Deleted!");
   }
   function checkOUtPayment(id, data) {
     let option = {
@@ -110,7 +110,7 @@ export function CartContextProvider({ children }) {
     };
 
     return axios.post(
-      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=https://fellobter-10.github.io/Freshcart/`,
+      `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${id}?url=https://fellobter-10.github.io/Freshcart`,
       body,
       option
     );
